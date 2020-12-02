@@ -32,7 +32,7 @@ public class FourAnime {
         List<String> selection = getRawTagsOfCSSQ(url, "#headerDIV_95");
 
         for (int i = 0; i < selection.size(); i++) {
-            urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+            urls.add(i, PageUtils.extractUrls(selection.get(i   )).get(0));
         }
 
         //urls = [https://4anime.to/anime/clannad-after-story, https://4anime.to/anime/clannad-after-story, https://4anime.to/anime/clannad-after-story]
@@ -51,7 +51,7 @@ public class FourAnime {
             }
 
         }
-        return  episodes;
+        return episodes;
     }
 
     public static String getEpisode(List<String> urls, int episode) {

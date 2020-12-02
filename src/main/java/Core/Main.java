@@ -34,6 +34,8 @@ public class Main {
         String url = FourAnime.getEpisode(episodes, Integer.parseInt(s));
         System.out.println("Ready to watch: " + FourAnime.getVideoURL(url));
 
+
+
     }
 
 }
