@@ -11,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Show.config("https://4anime.to/", "/?s=", "episodes range active", "#headerDIV_95");
-        Show.config("https://animekisa.tv/", "/search?q=", "infovan", ".lisbox22 .an");
+        Show.config("https://4anime.to/", "/?s=", "episodes range active", "#headerDIV_95", "source");
+        Show.config("https://animekisa.tv/", "/search?q=", "infovan", ".lisbox22 .an", "jw-media jw-reset");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Specify an Anime:");

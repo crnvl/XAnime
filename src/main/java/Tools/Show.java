@@ -17,22 +17,33 @@ public class Show {
     static String searchQuery;
     static String titleClass;
     static String searchCSSQ;
+    static String htmlClass;
 
-    public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ) {
+    public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ, String html_Class) {
         baseUrl = base_Url;
         searchQuery = search_Query;
         titleClass = title_Class;
         searchCSSQ = search_CSSQ;
+        htmlClass = html_Class;
     }
 
     /* returns source url from video page */
     public static String getVideoURL(String videoPage) throws IOException {
-        String htmlClass = "source";
-        List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
-
-        return vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
+        String returnA = null;
+        System.out.println(videoPage);
+        System.out.println(htmlClass);
+        if (baseUrl == "https://animekisa.tv/") {
+            /*PageUtils.selectPlayer("playerselect2 select_servers", videoPage);*/
+            List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
+            System.out.println(vidUrl);
+        }else {
+            List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
+            returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
+        }
+        return returnA;
     }
 
+    @Deprecated
     public static String getVideoURLWithClass(String videoPage, String htmlClass) throws IOException {
         List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
 
@@ -82,7 +93,7 @@ public class Show {
 
             for (int i = 0; i < episodeSelection.size(); i++) {
                 String ar[] = episodeSelection.get(i).replaceAll("<a class=\"infovan\" href=\"", "").replaceAll("\"", "").split(">");
-                    episodes.add(i, baseUrl + "/" + ar[0]);
+                    episodes.add(i, baseUrl + ar[0]);
             }
         }else {
             episodes = new ArrayList<String>();
