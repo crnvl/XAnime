@@ -44,12 +44,29 @@ public class Show {
         title = title.replace(" ", "+");
         String url = baseUrl + searchQuery + title;
 
-        List<String> animUrl = new ArrayList<String>();
         List<String> urls = new ArrayList<String>();
+        List<String> prep = new ArrayList<String>();
         List<String> selection = getRawTagsOfCSSQ(url, searchCSSQ);
 
-        for (int i = 0; i < selection.size(); i++) {
-            urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+        if (baseUrl == "https://animekisa.tv/") {
+            for (int i = 0; i < selection.size(); i++) {
+                String[] ar = selection.get(i).replaceAll("<a class=\"an\" href=\"", "").split(">");
+
+                prep.add(i, baseUrl + ar[0].replace("/", "").replaceAll("<a class=\"an hidemobile\" href=\"\"", "").replaceAll("\"", ""));
+            }
+            for (int i = 0; i < prep.size(); i++) {
+                    urls.add(i, PageUtils.extractUrls(prep.get(i)).get(0));
+            }
+
+            for (int i = 0; i < urls.size(); i++) {
+                if(urls.get(i).endsWith("https://animekisa.tv/")) {
+                    urls.remove(i);
+                }
+            }
+        } else {
+            for (int i = 0; i < selection.size(); i++) {
+                urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+            }
         }
 
         return urls;
@@ -59,13 +76,23 @@ public class Show {
     public static List<String> getTitle(List<String> urls, int title) throws IOException {
         List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
 
-        List<String> episodes = new ArrayList<String>();
-        for (int i = 0; i < episodeSelection.size(); i++) {
-            List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
-            for (int j = 0; j <allUrls.size() ; j++) {
-                episodes.add(i, allUrls.get(j));
-            }
+        List<String> episodes = null;
+        if (baseUrl == "https://animekisa.tv/") {
+            episodes = new ArrayList<String>();
 
+            for (int i = 0; i < episodeSelection.size(); i++) {
+                String ar[] = episodeSelection.get(i).replaceAll("<a class=\"infovan\" href=\"", "").replaceAll("\"", "").split(">");
+                    episodes.add(i, baseUrl + "/" + ar[0]);
+            }
+        }else {
+            episodes = new ArrayList<String>();
+            for (int i = 0; i < episodeSelection.size(); i++) {
+                List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
+                for (int j = 0; j <allUrls.size() ; j++) {
+                    episodes.add(i, allUrls.get(j));
+                }
+
+            }
         }
         return episodes;
     }

@@ -1,5 +1,6 @@
 package Core;
 
+import Tools.NoRobot;
 import Tools.Show;
 
 import java.io.BufferedReader;
@@ -11,7 +12,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Show.config("https://4anime.to/", "/?s=", "episodes range active", "#headerDIV_95");
+        /*Show.config("https://4anime.to/", "/?s=", "episodes range active", "#headerDIV_95");
+        Show.config("https://animekisa.tv/", "/search?q=", "infovan", ".lisbox22 .an");*/
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Specify an Anime:");

@@ -1,10 +1,9 @@
 package Tools;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import com.yamajun.cloudbypass.CHttpRequester;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,9 @@ public class Page {
 
     public static Document getDoc(String url) throws IOException {
         try {
-            return Jsoup.connect(url).get();
+            CHttpRequester requester = new CHttpRequester();
+            //System.out.println(requester.get(url));
+            return requester.get(url);
         } catch (Exception e) {
             return null;
         }
