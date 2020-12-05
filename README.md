@@ -9,6 +9,7 @@ A Tutorial for personal use is coming soon.
 
 ### Supported Sites
 - [4anime.to](4anime.to) (Use ``Show.config()`` with the commented Strings in Show.java)
+- [animekisa.tv/](animekisa.tv/) (Can't get Video URL yet)
 - Any other Site, if you change the config(). 
 
 Please feel free to submit more Sites by opening an [Issue](https://github.com/angelsflyinhell/XAnime/issues/new).
