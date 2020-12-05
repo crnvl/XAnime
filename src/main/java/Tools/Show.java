@@ -6,7 +6,24 @@ import java.util.List;
 
 import static Tools.Page.*;
 
-public class FourAnime {
+public class Show {
+
+    /*String baseUrl = "https://4anime.to/";
+    String searchQuery = "/?s=";
+    String titleClass = "episodes range active";
+    String searchCSSQ = "#headerDIV_95";*/
+
+    static String baseUrl;
+    static String searchQuery;
+    static String titleClass;
+    static String searchCSSQ;
+
+    public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ) {
+        baseUrl = base_Url;
+        searchQuery = search_Query;
+        titleClass = title_Class;
+        searchCSSQ = search_CSSQ;
+    }
 
     /* returns source url from video page */
     public static String getVideoURL(String videoPage) throws IOException {
@@ -25,23 +42,22 @@ public class FourAnime {
     /* returns all available titles with the searched name */
     public static List<String> search(String title) throws IOException {
         title = title.replace(" ", "+");
-        String url = "https://4anime.to/?s=" + title;
+        String url = baseUrl + searchQuery + title;
 
         List<String> animUrl = new ArrayList<String>();
         List<String> urls = new ArrayList<String>();
-        List<String> selection = getRawTagsOfCSSQ(url, "#headerDIV_95");
+        List<String> selection = getRawTagsOfCSSQ(url, searchCSSQ);
 
         for (int i = 0; i < selection.size(); i++) {
-            urls.add(i, PageUtils.extractUrls(selection.get(i   )).get(0));
+            urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
         }
 
-        //urls = [https://4anime.to/anime/clannad-after-story, https://4anime.to/anime/clannad-after-story, https://4anime.to/anime/clannad-after-story]
         return urls;
     }
 
     /* returns all available titles with the searched name */
     public static List<String> getTitle(List<String> urls, int title) throws IOException {
-        List<String> episodeSelection = getRawTagsOfClass(urls.get(title), "episodes range active");
+        List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
 
         List<String> episodes = new ArrayList<String>();
         for (int i = 0; i < episodeSelection.size(); i++) {

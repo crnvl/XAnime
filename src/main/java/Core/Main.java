@@ -1,6 +1,6 @@
 package Core;
 
-import Tools.FourAnime;
+import Tools.Show;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,11 +11,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        Show.config("https://4anime.to/", "/?s=", "episodes range active", "#headerDIV_95");
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Specify an Anime:");
         String s = br.readLine();
 
-        List<String> titles = FourAnime.search(s);
+        List<String> titles = Show.search(s);
         for (int i = 0; i < titles.size(); i++) {
             System.out.println(i + "    |   " + titles.get(i));
         }
@@ -23,7 +25,7 @@ public class Main {
         System.out.println("Select a title by typing one of the available numbers:");
         s = br.readLine();
 
-        List<String> episodes = FourAnime.getTitle(titles, Integer.parseInt(s));
+        List<String> episodes = Show.getTitle(titles, Integer.parseInt(s));
         for (int i = 0; i < episodes.size(); i++) {
             System.out.println(i + "    |   " + episodes.get((episodes.size() - i) - 1));
         }
@@ -31,8 +33,8 @@ public class Main {
         System.out.println("Select an episode by typing one of the available numbers:");
         s = br.readLine();
 
-        String url = FourAnime.getEpisode(episodes, Integer.parseInt(s));
-        System.out.println("Ready to watch: " + FourAnime.getVideoURL(url));
+        String url = Show.getEpisode(episodes, Integer.parseInt(s));
+        System.out.println("Ready to watch: " + Show.getVideoURL(url));
 
 
 
