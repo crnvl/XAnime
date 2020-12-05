@@ -9,7 +9,7 @@ A Tutorial for personal use is coming soon.
 
 ### Supported Sites
 - [4anime.to](4anime.to) (Use ``Show.config()`` with the commented Strings in Show.java)
-- Any other Site. Use 
+- Any other Site, if you change the config(). 
 
 Please feel free to submit more Sites by opening an [Issue](https://github.com/angelsflyinhell/XAnime/issues/new).
 Otherwise, it's fairly easy to add more Sites yourself. If you do so, please open a [Pull Request](https://github.com/angelsflyinhell/XAnime/pulls).
