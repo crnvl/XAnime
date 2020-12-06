@@ -1,9 +1,13 @@
 package Tools;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import com.yamajun.cloudbypass.CHttpRequester;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +15,9 @@ import java.util.List;
 
 public class Page {
 
-    public static Document getDoc(String url) throws IOException {
+    public static Document getDoc(String url) {
         try {
             CHttpRequester requester = new CHttpRequester();
-            //System.out.println(requester.get(url));
             return requester.get(url);
         } catch (Exception e) {
             return null;
@@ -84,8 +87,20 @@ public class Page {
         return wordsList;
     }
 
-    public static List<String> getRawTagsOfClass(String url, String htmlClass) throws IOException {
+    public static List<String> getRawTagsOfClass(String url, String classS) throws IOException {
         Document doc = getDoc(url);
+        if (doc == null)
+            return new ArrayList<String>();
+        Elements links = doc.getElementsByClass(classS);
+        List<String> wordsList = new ArrayList<String>();
+        for (Element link : links) {
+            wordsList.add(link.toString());
+        }
+        return wordsList;
+    }
+
+    public static List<String> getRawTagsOfClassSource(String source, String htmlClass) throws IOException {
+        Document doc = Jsoup.parse(source);
         if (doc == null)
             return new ArrayList<String>();
         Elements links = doc.getElementsByClass(htmlClass);

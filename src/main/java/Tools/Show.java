@@ -1,5 +1,7 @@
 package Tools;
 
+import org.jsoup.nodes.Document;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +30,26 @@ public class Show {
     }
 
     /* returns source url from video page */
-    public static String getVideoURL(String videoPage) throws IOException {
+    public static String getVideoURL(String videoPage) throws IOException, InterruptedException {
         String returnA = null;
-        System.out.println(videoPage);
-        System.out.println(htmlClass);
         if (baseUrl == "https://animekisa.tv/") {
-            /*PageUtils.selectPlayer("playerselect2 select_servers", videoPage);*/
-            List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
-            System.out.println(vidUrl);
+            String src = PageUtils.getBrowserSource(videoPage);
+            /*System.out.println(src);
+
+            List<String> s = getRawTagsOfClassSource(src, "video-js vjs-default-skin vjs-skin-flat-grey vjs-big-play-centered vjs-16-9 vidstreaming_iframe");
+            System.out.println(s);
+
+            String playerUrl = PageUtils.extractUrls(s.get(0)).get(0);
+            System.out.println(playerUrl);*/
+
+            List<String> s = PageUtils.extractUrls(src);
+
+            returnA = s.get(28);
         }else {
             List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
             returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
         }
-        return returnA;
+        return "[Player URL] " + returnA;
     }
 
     @Deprecated
@@ -89,6 +98,7 @@ public class Show {
 
         List<String> episodes = null;
         if (baseUrl == "https://animekisa.tv/") {
+
             episodes = new ArrayList<String>();
 
             for (int i = 0; i < episodeSelection.size(); i++) {
@@ -112,7 +122,7 @@ public class Show {
         return urls.get((urls.size() - episode) - 1);
     }
 
-    public static String getAnime(String anime, int title, int episode) throws IOException {
+    public static String getAnime(String anime, int title, int episode) throws IOException, InterruptedException {
         return getVideoURL(getEpisode(getTitle(search(anime), title), episode));
     }
 
