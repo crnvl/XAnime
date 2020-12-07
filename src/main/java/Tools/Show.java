@@ -1,7 +1,5 @@
 package Tools;
 
-import org.jsoup.nodes.Document;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +7,6 @@ import java.util.List;
 import static Tools.Page.*;
 
 public class Show {
-
-    /*String baseUrl = "https://4anime.to/";
-    String searchQuery = "?s=";
-    String titleClass = "episodes range active";
-    String searchCSSQ = "#headerDIV_95";*/
 
     static String baseUrl = "https://4anime.to/";
     static String searchQuery = "?s=";
