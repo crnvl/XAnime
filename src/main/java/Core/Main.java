@@ -15,7 +15,7 @@ public class Main {
         System.out.println("Specify an Anime:");
         String s = br.readLine();
 
-        List<String> titles = Show.search(s);
+        List<String> titles = Show.search(s, false);
         for (int i = 0; i < titles.size(); i++) {
             System.out.println(i + "    |   " + titles.get(i));
         }
