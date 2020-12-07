@@ -11,51 +11,34 @@ import static Tools.Page.*;
 public class Show {
 
     /*String baseUrl = "https://4anime.to/";
-    String searchQuery = "/?s=";
+    String searchQuery = "https://4anime.to/";
     String titleClass = "episodes range active";
     String searchCSSQ = "#headerDIV_95";*/
 
-    static String baseUrl;
-    static String searchQuery;
-    static String titleClass;
-    static String searchCSSQ;
-    static String htmlClass;
+    static String baseUrl = "https://4anime.to/";
+    static String searchQuery = "https://4anime.to/";
+    static String titleClass = "episodes range active";
+    static String searchCSSQ = "#headerDIV_95";
 
-    public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ, String html_Class) {
+    @Deprecated
+    public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ) {
         baseUrl = base_Url;
         searchQuery = search_Query;
         titleClass = title_Class;
         searchCSSQ = search_CSSQ;
-        htmlClass = html_Class;
     }
 
     /* returns source url from video page */
     public static String getVideoURL(String videoPage) throws IOException, InterruptedException {
-        String returnA = null;
-        if (baseUrl == "https://animekisa.tv/") {
-            String src = PageUtils.getBrowserSource(videoPage);
-            /*System.out.println(src);
-
-            List<String> s = getRawTagsOfClassSource(src, "video-js vjs-default-skin vjs-skin-flat-grey vjs-big-play-centered vjs-16-9 vidstreaming_iframe");
-            System.out.println(s);
-
-            String playerUrl = PageUtils.extractUrls(s.get(0)).get(0);
-            System.out.println(playerUrl);*/
-
-            List<String> s = PageUtils.extractUrls(src);
-
-            returnA = s.get(28);
-        }else {
-            List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
+        String returnA;
+            List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
             returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
-        }
-        return "[Player URL] " + returnA;
+        return returnA;
     }
 
     @Deprecated
     public static String getVideoURLWithClass(String videoPage, String htmlClass) throws IOException {
         List<String> vidUrl = getRawTagsOfURL(videoPage, htmlClass);
-
         return vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
     }
 
@@ -63,49 +46,18 @@ public class Show {
     public static List<String> search(String title) throws IOException {
         title = title.replace(" ", "+");
         String url = baseUrl + searchQuery + title;
-
         List<String> urls = new ArrayList<String>();
-        List<String> prep = new ArrayList<String>();
         List<String> selection = getRawTagsOfCSSQ(url, searchCSSQ);
-
-        if (baseUrl == "https://animekisa.tv/") {
-            for (int i = 0; i < selection.size(); i++) {
-                String[] ar = selection.get(i).replaceAll("<a class=\"an\" href=\"", "").split(">");
-
-                prep.add(i, baseUrl + ar[0].replace("/", "").replaceAll("<a class=\"an hidemobile\" href=\"\"", "").replaceAll("\"", ""));
-            }
-            for (int i = 0; i < prep.size(); i++) {
-                    urls.add(i, PageUtils.extractUrls(prep.get(i)).get(0));
-            }
-
-            for (int i = 0; i < urls.size(); i++) {
-                if(urls.get(i).endsWith("https://animekisa.tv/")) {
-                    urls.remove(i);
-                }
-            }
-        } else {
             for (int i = 0; i < selection.size(); i++) {
                 urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
             }
-        }
-
         return urls;
     }
 
     /* returns all available titles with the searched name */
     public static List<String> getTitle(List<String> urls, int title) throws IOException {
         List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
-
-        List<String> episodes = null;
-        if (baseUrl == "https://animekisa.tv/") {
-
-            episodes = new ArrayList<String>();
-
-            for (int i = 0; i < episodeSelection.size(); i++) {
-                String ar[] = episodeSelection.get(i).replaceAll("<a class=\"infovan\" href=\"", "").replaceAll("\"", "").split(">");
-                    episodes.add(i, baseUrl + ar[0]);
-            }
-        }else {
+        List<String> episodes;
             episodes = new ArrayList<String>();
             for (int i = 0; i < episodeSelection.size(); i++) {
                 List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
@@ -114,7 +66,6 @@ public class Show {
                 }
 
             }
-        }
         return episodes;
     }
 

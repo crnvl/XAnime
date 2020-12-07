@@ -26,16 +26,6 @@
             <artifactId>jsoup</artifactId>
             <version>1.13.1</version>
         </dependency>
-        <dependency>
-            <groupId>io.lindstrom</groupId>
-            <artifactId>m3u8-parser</artifactId>
-            <version>0.17</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
-        </dependency>
     </dependencies>
 
 </project>
