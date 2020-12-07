@@ -7,7 +7,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GUI {
@@ -21,7 +23,7 @@ public class GUI {
 
     private DefaultTableModel showsModel = new DefaultTableModel();
 
-    private String[] showsHeader = {"name"};
+    private String[] showsHeader = {"Name"};
 
     public GUI() {
         JFrame frame = new JFrame();
@@ -35,17 +37,26 @@ public class GUI {
         showSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String searchQuery = showSearchField.getText();
-                try {
-                    List<String> titles = Show.search(searchQuery);
-                    for(String s : titles){
-                        System.out.println(s);
+                List<String> anime = null;
+
+                if (false) {
+                    try {
+                        String searchQuery = showSearchField.getText();
+                        anime = Show.search(searchQuery);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
                     }
-                    Object[][] anime = {titles.toArray()};
-                    System.out.println(Arrays.toString(anime));
-                    showsModel.setDataVector(anime, showsHeader);
-                } catch (IOException ignored) {
+                } else {
+
+                    String[] showList = {"nartuo 1", "mehr naruto", "aaaa naruuuto"};
+                    anime = new ArrayList<>(Arrays.asList(showList));
                 }
+
+                Object[][] animeTest = new Object[anime.size()][1]; //[rows][columns]
+                for (int i = 0; i < anime.size(); i++) {
+                    animeTest[i][0] = anime.get(i);
+                }
+                showsModel.setDataVector(animeTest, showsHeader);
 
             }
         });
