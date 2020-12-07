@@ -1,7 +1,5 @@
 package Tools;
 
-import org.jsoup.nodes.Document;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +8,11 @@ import static Tools.Page.*;
 
 public class Show {
 
-    /*String baseUrl = "https://4anime.to/";
-    String searchQuery = "https://4anime.to/";
-    String titleClass = "episodes range active";
-    String searchCSSQ = "#headerDIV_95";*/
-
     static String baseUrl = "https://4anime.to/";
-    static String searchQuery = "https://4anime.to/";
+    static String searchQuery = "?s=";
     static String titleClass = "episodes range active";
     static String searchCSSQ = "#headerDIV_95";
+    public static List<String> thumbnails;
 
     @Deprecated
     public static void config(String base_Url, String search_Query, String title_Class, String search_CSSQ) {
@@ -29,10 +23,10 @@ public class Show {
     }
 
     /* returns source url from video page */
-    public static String getVideoURL(String videoPage) throws IOException, InterruptedException {
+    public static String getVideoURL(String videoPage) {
         String returnA;
-            List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
-            returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
+        List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
+        returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
         return returnA;
     }
 
@@ -43,29 +37,34 @@ public class Show {
     }
 
     /* returns all available titles with the searched name */
-    public static List<String> search(String title) throws IOException {
+    public static List<String> search(String title, boolean thumbnails) {
         title = title.replace(" ", "+");
         String url = baseUrl + searchQuery + title;
         List<String> urls = new ArrayList<String>();
         List<String> selection = getRawTagsOfCSSQ(url, searchCSSQ);
+        for (int i = 0; i < selection.size(); i++) {
+            urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+        }
+        if(thumbnails) {
             for (int i = 0; i < selection.size(); i++) {
-                urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+                urls.add(i, PageUtils.extractUrls(selection.get(i)).get(1));
             }
+        }
         return urls;
     }
 
     /* returns all available titles with the searched name */
-    public static List<String> getTitle(List<String> urls, int title) throws IOException {
+    public static List<String> getTitle(List<String> urls, int title) {
         List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
         List<String> episodes;
-            episodes = new ArrayList<String>();
-            for (int i = 0; i < episodeSelection.size(); i++) {
-                List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
-                for (int j = 0; j <allUrls.size() ; j++) {
-                    episodes.add(i, allUrls.get(j));
-                }
-
+        episodes = new ArrayList<String>();
+        for (int i = 0; i < episodeSelection.size(); i++) {
+            List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
+            for (int j = 0; j <allUrls.size() ; j++) {
+                episodes.add(i, allUrls.get(j));
             }
+
+        }
         return episodes;
     }
 
@@ -73,8 +72,8 @@ public class Show {
         return urls.get((urls.size() - episode) - 1);
     }
 
-    public static String getAnime(String anime, int title, int episode) throws IOException, InterruptedException {
-        return getVideoURL(getEpisode(getTitle(search(anime), title), episode));
+    public static String getAnime(String anime, int title, int episode) {
+        return getVideoURL(getEpisode(getTitle(search(anime, false), title), episode));
     }
 
 }

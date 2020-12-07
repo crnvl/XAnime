@@ -4,11 +4,15 @@ import Tools.Show;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,12 +38,24 @@ public class GUI {
     private List<String> animes;
     private List<String> episodes;
 
+    /**
+     * This is only set to false for testing when 4anime is down
+     */
+    public boolean fourAnimeMode = true;
+
     public GUI() {
         JFrame frame = new JFrame();
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
 
         showsTable.setModel(showsModel);
         episodesTable.setModel(episodesModel);
@@ -48,13 +64,9 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (false) {
-                    try {
-                        String searchQuery = showSearchField.getText();
-                        animes = Show.search(searchQuery);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
+                if (fourAnimeMode) {
+                    String searchQuery = showSearchField.getText();
+                    animes = Show.search(searchQuery, false);
                 } else {
 
                     String[] showList = {"nartuo 1", "mehr naruto", "aaaa naruuuto"};
@@ -63,7 +75,7 @@ public class GUI {
 
                 Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
                 for (int i = 0; i < animes.size(); i++) {
-                    animeTest[i][0] = animes.get(i);
+                    animeTest[i][0] = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
                 }
                 showsModel.setDataVector(animeTest, showsHeader);
 
@@ -82,25 +94,33 @@ public class GUI {
         selectShowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    System.out.println("Getting show");
 
-                    if(false){
-                        try {
-                            episodes = Show.getTitle(animes, selectedShow);
-                        } catch (IOException ignored) {
-                        }
-                    } else {
-                        String[] episodeList = {"prolog", "zweite episode", "hallo aa"};
-                        animes = new ArrayList<>(Arrays.asList(episodeList));
-                    }
+                if (fourAnimeMode) {
+                    episodes = Show.getTitle(animes, selectedShow);
+                } else {
+                    String[] episodeList = {"prolog", "zweite episode", "hallo aa"};
+                    episodes = new ArrayList<>(Arrays.asList(episodeList));
+                }
 
-                    Object[][] episodesArray = new Object[animes.size()][2]; //[rows][columns]
+                Object[][] episodesArray = new Object[episodes.size()][2]; //[rows][columns]
 
-                    for (int i = 0; i < animes.size(); i++) {
-                        episodesArray[i][0] = animes.get(i);
-                        episodesArray[i][1] = i;
-                    }
-                    episodesModel.setDataVector(episodesArray, episodesHeader);
+                for (int i = 0; i < episodes.size(); i++) {
+                    episodesArray[i][1] = episodes.get(i).replaceAll("https:\\/\\/4anime.to\\/(.+)\\/\\?id=.+", "$1").replaceAll("-", " "); //replace all strich with a leerzeichen
+                    episodesArray[i][0] = i + 1;
+                }
+                episodesModel.setDataVector(episodesArray, episodesHeader);
+            }
+        });
+
+        linkOpenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String url = Show.getVideoURL(episodes.get(selectedEpisode));
+                try {
+                    Desktop.getDesktop().browse(new URL(url).toURI());
+                } catch (IOException | URISyntaxException ioExceptionOrURISyntaxException){
+                    ioExceptionOrURISyntaxException.printStackTrace();
+                }
             }
         });
     }
