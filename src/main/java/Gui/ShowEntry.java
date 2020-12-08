@@ -18,13 +18,14 @@ public class ShowEntry extends JPanel {
 
     private int number;
 
-    private static int width = 300;
+    private static int width = 200;
 
     public ShowEntry(String text, String iconPath, final int number, final GUI gui) {
         super();
 
         //LABEL ICON
         textArea = new JTextArea(text);
+        textArea.setLineWrap(true);
         selectButton = new JButton("Select Show");
 
         iconLabel = new JLabel();

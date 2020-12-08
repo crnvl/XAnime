@@ -28,7 +28,7 @@ public class GUI {
     private DefaultTableModel episodesModel = new DefaultTableModel();
 
     private final String[] showsHeader = {"Name"};
-    private final String[] episodesHeader = {"Number", "Name"};
+    private final String[] episodesHeader = {"Episode Name"};
 
     private int selectedShow;
     private int selectedEpisode;
@@ -42,17 +42,13 @@ public class GUI {
     public boolean fourAnimeMode = true;
 
     public GUI() {
+
         final JFrame frame = new JFrame();
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(1000, 500);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
-
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
-            e.printStackTrace();
-        }
 
         //showsTable.setModel(showsModel);
         episodesTable.setModel(episodesModel);
@@ -110,11 +106,10 @@ public class GUI {
             episodes = new ArrayList<>(Arrays.asList(episodeList));
         }
 
-        Object[][] episodesArray = new Object[episodes.size()][2]; //[rows][columns]
+        Object[][] episodesArray = new Object[episodes.size()][1]; //[rows][columns]
 
         for (int i = 0; i < episodes.size(); i++) {
-            episodesArray[i][1] = episodes.get(i).replaceAll("https:\\/\\/4anime.to\\/(.+)\\/\\?id=.+", "$1").replaceAll("-", " "); //replace all strich with a leerzeichen
-            episodesArray[i][0] = i + 1;
+            episodesArray[i][0] = episodes.get(i).replaceAll("https:\\/\\/4anime.to\\/(.+)\\/\\?id=.+", "$1").replaceAll("-", " "); //replace all strich with a leerzeichen
         }
         episodesModel.setDataVector(episodesArray, episodesHeader);
 
@@ -126,6 +121,11 @@ public class GUI {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
         new GUI();
     }
 }
