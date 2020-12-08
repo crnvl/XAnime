@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -86,7 +85,7 @@ public class GUI {
             @Override
             public void mouseClicked(MouseEvent e) {
                 selectedShow = showsTable.getSelectedRow();
-                selectedShowField.setText(animes.get(selectedShow));
+                selectedShowField.setText(animes.get(selectedShow).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " "));
             }
 
         });
