@@ -34,8 +34,6 @@ public class Main {
         String url = Show.getEpisode(episodes, Integer.parseInt(s));
         System.out.println("Ready to watch: " + Show.getVideoURL(url));
 
-
-
     }
 
 }
