@@ -19,10 +19,10 @@ public class GUI {
     private JTextField showSearchField;
     private JTable showsTable;
     private JButton showSearchButton;
-    private JButton linkOpenButton;
     private JPanel mainPanel;
     private JTable episodesTable;
     private JPanel showPanel;
+    private JScrollPane showScrollPanel;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
     private DefaultTableModel episodesModel = new DefaultTableModel();
@@ -36,11 +36,6 @@ public class GUI {
     private List<String> thumbnails;
     private List<String> episodes;
 
-    /**
-     * This is only set to false for testing when 4anime is down
-     */
-    public boolean fourAnimeMode = true;
-
     public GUI() {
 
         final JFrame frame = new JFrame();
@@ -48,12 +43,17 @@ public class GUI {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 500);
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.setTitle("XAnime Browser");
         frame.setVisible(true);
 
         //showsTable.setModel(showsModel);
         episodesTable.setModel(episodesModel);
+        episodesTable.setRowHeight(50);
 
         showPanel.setLayout(new WrapLayout());
+        showScrollPanel.getVerticalScrollBar().setUnitIncrement(16);
+        showScrollPanel.getHorizontalScrollBar().setUnitIncrement(16);
+
 
         //SEARCH SHOW
         final GUI gui = this;
@@ -61,17 +61,13 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                if (fourAnimeMode) {
-                    String searchQuery = showSearchField.getText();
-                    animes = Show.search(searchQuery, false);
-                    thumbnails = Show.search(searchQuery, true);
-                    if(animes.size() < 1){
-                        JOptionPane.showMessageDialog(null, searchQuery + " not found.");
-                    }
-                } else {
-                    String[] showList = {"nartuo 1", "mehr naruto", "aaaa naruuuto"};
-                    animes = new ArrayList<>(Arrays.asList(showList));
+                String searchQuery = showSearchField.getText();
+                animes = Show.search(searchQuery, false);
+                thumbnails = Show.search(searchQuery, true);
+                if (animes.size() < 1) {
+                    JOptionPane.showMessageDialog(null, searchQuery + " not found.");
                 }
+
 
                 Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
                 showPanel.removeAll();
@@ -81,15 +77,14 @@ public class GUI {
                     showPanel.add(new ShowEntry(name, thumbnails.get(i), i, gui));
                 }
                 showsModel.setDataVector(animeTest, showsHeader);
-                frame.revalidate();
-                frame.repaint();
-
+                showPanel.revalidate();
             }
         });
 
-        linkOpenButton.addActionListener(new ActionListener() {
+        episodesTable.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseClicked(MouseEvent e) {
+                selectedEpisode = episodesTable.getSelectedRow();
                 String url = Show.getVideoURL(episodes.get(selectedEpisode));
                 try {
                     Desktop.getDesktop().browse(new URL(url).toURI());
@@ -101,13 +96,8 @@ public class GUI {
     }
 
     private void loadEpisodes() {
-        if (fourAnimeMode) {
-            episodes = Show.getTitle(animes, selectedShow);
-        } else {
-            String[] episodeList = {"prolog", "zweite episode", "hallo aa"};
-            episodes = new ArrayList<>(Arrays.asList(episodeList));
-        }
 
+        episodes = Show.getTitle(animes, selectedShow);
         Object[][] episodesArray = new Object[episodes.size()][1]; //[rows][columns]
 
         for (int i = 0; i < episodes.size(); i++) {
@@ -117,7 +107,7 @@ public class GUI {
 
     }
 
-    public void selectShow(int show){
+    public void selectShow(int show) {
         selectedShow = show;
         loadEpisodes();
     }
