@@ -1,6 +1,7 @@
 package Gui;
 
 import Tools.Show;
+import com.bulenkov.darcula.DarculaLaf;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GUI {
@@ -54,6 +56,17 @@ public class GUI {
         showScrollPanel.getVerticalScrollBar().setUnitIncrement(16);
         showScrollPanel.getHorizontalScrollBar().setUnitIncrement(16);
 
+        //---TEST ONLY
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 10; j++) {
+                showPanel.add(new ShowEntry("Nicks world", "https://cdn.discordapp.com/attachments/771679061344256000/781617130164060190/unknown.png", 0, this));
+            }
+            showPanel.add(new ShowEntry("janina sterben janina sterben janina sterben", "https://media.discordapp.net/attachments/771679061344256000/781617434146111548/unknown.png", 0, this));
+        }
+
+        showPanel.revalidate();
+        //---TEST ONLY
+
 
         //SEARCH SHOW
         final GUI gui = this;
@@ -67,7 +80,6 @@ public class GUI {
                 if (animes.size() < 1) {
                     JOptionPane.showMessageDialog(null, searchQuery + " not found.");
                 }
-
 
                 Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
                 showPanel.removeAll();
@@ -98,13 +110,13 @@ public class GUI {
     private void loadEpisodes() {
 
         episodes = Show.getTitle(animes, selectedShow);
+        Collections.reverse(episodes);
         Object[][] episodesArray = new Object[episodes.size()][1]; //[rows][columns]
 
         for (int i = 0; i < episodes.size(); i++) {
             episodesArray[i][0] = episodes.get(i).replaceAll("https:\\/\\/4anime.to\\/(.+)\\/\\?id=.+", "$1").replaceAll("-", " "); //replace all strich with a leerzeichen
         }
         episodesModel.setDataVector(episodesArray, episodesHeader);
-
     }
 
     public void selectShow(int show) {
@@ -114,10 +126,11 @@ public class GUI {
 
     public static void main(String[] args) {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException e) {
+            UIManager.setLookAndFeel(new DarculaLaf());
+        } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+
         new GUI();
     }
 }

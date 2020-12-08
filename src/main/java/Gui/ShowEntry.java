@@ -16,6 +16,7 @@ public class ShowEntry extends JPanel {
     private JLabel iconLabel;
     private JButton selectButton;
 
+    private boolean textCropped = false;
     private int number;
 
     private static int width = 200;
@@ -23,9 +24,15 @@ public class ShowEntry extends JPanel {
     public ShowEntry(String text, String iconPath, final int number, final GUI gui) {
         super();
 
-        //LABEL ICON
         textArea = new JTextArea(text);
-        textArea.setLineWrap(true);
+
+        //LABEL ICON
+        if(text.length() > 33){
+            textCropped = true;
+            textArea.setText(text.replaceAll("(?<=^.{33}).*", "..."));
+            textArea.setToolTipText(text);
+        }
+        textArea.setEditable(false);
         selectButton = new JButton("Select Show");
 
         iconLabel = new JLabel();
