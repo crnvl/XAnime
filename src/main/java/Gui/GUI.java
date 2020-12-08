@@ -11,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -29,6 +28,7 @@ public class GUI {
     private JTable episodesTable;
     private JTextField selectedShowField;
     private JLabel showImageLabel;
+    private JPanel showPanel;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
     private DefaultTableModel episodesModel = new DefaultTableModel();
@@ -48,10 +48,10 @@ public class GUI {
     public boolean fourAnimeMode = true;
 
     public GUI() {
-        JFrame frame = new JFrame();
+        final JFrame frame = new JFrame();
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
 
@@ -64,6 +64,9 @@ public class GUI {
         showsTable.setModel(showsModel);
         episodesTable.setModel(episodesModel);
 
+        showPanel.setLayout(new WrapLayout());
+
+        //SEARCH SHOW
         showSearchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,9 +83,13 @@ public class GUI {
 
                 Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
                 for (int i = 0; i < animes.size(); i++) {
-                    animeTest[i][0] = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
+                    String name = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
+                    animeTest[i][0] = name;
+                    showPanel.add(new ShowEntry(name, thumbnails.get(i)));
                 }
                 showsModel.setDataVector(animeTest, showsHeader);
+                frame.revalidate();
+                frame.repaint();
 
             }
         });
