@@ -2,6 +2,7 @@ package Gui;
 
 import Tools.Show;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -9,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -25,6 +28,7 @@ public class GUI {
     private JPanel mainPanel;
     private JTable episodesTable;
     private JTextField selectedShowField;
+    private JLabel showImageLabel;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
     private DefaultTableModel episodesModel = new DefaultTableModel();
@@ -35,6 +39,7 @@ public class GUI {
     private int selectedShow;
     private int selectedEpisode;
     private List<String> animes;
+    private List<String> thumbnails;
     private List<String> episodes;
 
     /**
@@ -66,6 +71,7 @@ public class GUI {
                 if (fourAnimeMode) {
                     String searchQuery = showSearchField.getText();
                     animes = Show.search(searchQuery, false);
+                    thumbnails = Show.search(searchQuery, true);
                 } else {
 
                     String[] showList = {"nartuo 1", "mehr naruto", "aaaa naruuuto"};
@@ -81,11 +87,18 @@ public class GUI {
             }
         });
 
+        //SELECT SHOW
         showsTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 selectedShow = showsTable.getSelectedRow();
                 selectedShowField.setText(animes.get(selectedShow).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " "));
+                try {
+                    BufferedImage myPicture = ImageIO.read(new URL(thumbnails.get(selectedShow)));
+                    showImageLabel.setIcon(new ImageIcon(myPicture));
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
 
         });
