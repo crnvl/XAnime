@@ -65,8 +65,10 @@ public class GUI {
                     String searchQuery = showSearchField.getText();
                     animes = Show.search(searchQuery, false);
                     thumbnails = Show.search(searchQuery, true);
+                    if(animes.size() < 1){
+                        JOptionPane.showMessageDialog(null, searchQuery + " not found.");
+                    }
                 } else {
-
                     String[] showList = {"nartuo 1", "mehr naruto", "aaaa naruuuto"};
                     animes = new ArrayList<>(Arrays.asList(showList));
                 }
