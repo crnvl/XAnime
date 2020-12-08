@@ -3,24 +3,29 @@ package Gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
 public class ShowEntry extends JPanel {
 
-    BufferedImage thumbnail;
-    ImageIcon icon;
-    JLabel textLabel;
-    JLabel iconLabel;
+    private BufferedImage thumbnail;
+    private ImageIcon icon;
+    private JTextArea textArea;
+    private JLabel iconLabel;
+    private JButton selectButton;
 
-    private static int width = 100;
+    private int number;
 
-    public ShowEntry(String text, String iconPath) {
+    private static int width = 300;
+
+    public ShowEntry(String text, String iconPath, final int number, final GUI gui) {
         super();
 
         //LABEL ICON
-        textLabel = new JLabel(text);
+        textArea = new JTextArea(text);
+        selectButton = new JButton("Select Show");
 
         iconLabel = new JLabel();
         try {
@@ -32,8 +37,20 @@ public class ShowEntry extends JPanel {
         icon = new ImageIcon(scaled);
         iconLabel.setIcon(icon);
 
+        selectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.selectShow(number);
+            }
+        });
+
         setLayout(new BorderLayout());
-        add(textLabel, BorderLayout.SOUTH);
-        add(iconLabel, BorderLayout.CENTER);
+        add(selectButton, BorderLayout.SOUTH);
+        add(textArea, BorderLayout.CENTER);
+        add(iconLabel, BorderLayout.NORTH);
+    }
+
+    public int getNumber(){
+        return number;
     }
 }
