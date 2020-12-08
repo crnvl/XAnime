@@ -19,13 +19,13 @@ import java.util.List;
 
 public class GUI {
     private JTextField showSearchField;
-    private JTable showsTable;
     private JButton showSearchButton;
     private JPanel mainPanel;
     private JTable episodesTable;
     private JPanel showPanel;
     private JScrollPane showScrollPanel;
     private JProgressBar loadingAnimeBar;
+    private JLabel animeNameLabel;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
     private DefaultTableModel episodesModel = new DefaultTableModel();
@@ -75,44 +75,44 @@ public class GUI {
 
         //SEARCH SHOW
         final GUI gui = this;
-        showSearchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        showSearchButton.addActionListener(e -> {
 
-                Runnable searchRunnable = () -> {
-                    loadingAnimeBar.setValue(0);
-                    String searchQuery = showSearchField.getText();
-                    animes = Show.search(searchQuery, false);
-                    thumbnails = Show.search(searchQuery, true);
-                    if (animes.size() < 1) {
-                        JOptionPane.showMessageDialog(null, searchQuery + " not found.");
+            Runnable searchRunnable = () -> {
+                loadingAnimeBar.setVisible(true);
+                loadingAnimeBar.setValue(0);
+                String searchQuery = showSearchField.getText();
+                animes = Show.search(searchQuery, false);
+                loadingAnimeBar.setValue(15);
+                thumbnails = Show.search(searchQuery, true);
+                if (animes.size() < 1) {
+                    JOptionPane.showMessageDialog(null, searchQuery + " not found.");
+                }
+
+                loadingAnimeBar.setValue(30);
+                int max = animes.size() - 1;
+
+                Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
+                showPanel.removeAll();
+                for (int i = 0; i < animes.size(); i++) {
+                    String name = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
+                    animeTest[i][0] = name;
+                    try {
+                        showPanel.add(new ShowEntry(name, thumbnails.get(i), i, gui));
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
                     }
+                    double completed = (double) i / (double) max;
+                    int perhepage = (int) (70 * completed);
+                    loadingAnimeBar.setValue(perhepage + 30);
+                    System.out.println("show " + i);
+                }
+                showsModel.setDataVector(animeTest, showsHeader);
+                showPanel.revalidate();
+                loadingAnimeBar.setVisible(false);
+            };
 
-                    loadingAnimeBar.setValue(30);
-                    int max = animes.size() - 1;
-
-                    Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
-                    showPanel.removeAll();
-                    for (int i = 0; i < animes.size(); i++) {
-                        String name = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
-                        animeTest[i][0] = name;
-                        try {
-                            showPanel.add(new ShowEntry(name, thumbnails.get(i), i, gui));
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
-                        double completed = (double) i / (double) max;
-                        int perhepage = (int) (70 * completed);
-                        loadingAnimeBar.setValue(perhepage + 30);
-                        System.out.println("show " + i);
-                    }
-                    showsModel.setDataVector(animeTest, showsHeader);
-                    showPanel.revalidate();
-                };
-
-                Thread thread = new Thread(searchRunnable);
-                thread.start();
-            }
+            Thread thread = new Thread(searchRunnable);
+            thread.start();
         });
 
         episodesTable.addMouseListener(new MouseAdapter() {
@@ -132,6 +132,9 @@ public class GUI {
     private void loadEpisodes() {
 
         loadingAnimeBar.setValue(0);
+        animeNameLabel.setText(animes.get(selectedShow).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " "));
+
+        //set description here
 
         episodes = Show.getTitle(animes, selectedShow);
         Collections.reverse(episodes);
