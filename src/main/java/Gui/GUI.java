@@ -25,6 +25,7 @@ public class GUI {
     private JTable episodesTable;
     private JPanel showPanel;
     private JScrollPane showScrollPanel;
+    private JProgressBar loadingAnimeBar;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
     private DefaultTableModel episodesModel = new DefaultTableModel();
@@ -39,6 +40,7 @@ public class GUI {
     private List<String> episodes;
 
     public GUI() {
+        setup();
 
         final JFrame frame = new JFrame();
         frame.setContentPane(mainPanel);
@@ -57,14 +59,17 @@ public class GUI {
         showScrollPanel.getHorizontalScrollBar().setUnitIncrement(16);
 
         //---TEST ONLY
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 10; j++) {
-                showPanel.add(new ShowEntry("Nicks world", "https://cdn.discordapp.com/attachments/771679061344256000/781617130164060190/unknown.png", 0, this));
+/*        try {
+            for (int i = 0; i < 11; i++) {
+                for (int j = 0; j < 10; j++) {
+                    showPanel.add(new ShowEntry("Nicks world", "https://cdn.discordapp.com/attachments/771679061344256000/781617130164060190/unknown.png", 0, this));
+                }
+                showPanel.add(new ShowEntry("janina sterben janina sterben janina sterben", "https://media.discordapp.net/attachments/771679061344256000/781617434146111548/unknown.png", 0, this));
             }
-            showPanel.add(new ShowEntry("janina sterben janina sterben janina sterben", "https://media.discordapp.net/attachments/771679061344256000/781617434146111548/unknown.png", 0, this));
-        }
-
-        showPanel.revalidate();
+            showPanel.revalidate();
+        } catch (IOException e) {
+            System.err.println("NickNotFoundException");
+        }*/
         //---TEST ONLY
 
 
@@ -74,22 +79,39 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String searchQuery = showSearchField.getText();
-                animes = Show.search(searchQuery, false);
-                thumbnails = Show.search(searchQuery, true);
-                if (animes.size() < 1) {
-                    JOptionPane.showMessageDialog(null, searchQuery + " not found.");
-                }
+                Runnable searchRunnable = () -> {
+                    loadingAnimeBar.setValue(0);
+                    String searchQuery = showSearchField.getText();
+                    animes = Show.search(searchQuery, false);
+                    thumbnails = Show.search(searchQuery, true);
+                    if (animes.size() < 1) {
+                        JOptionPane.showMessageDialog(null, searchQuery + " not found.");
+                    }
 
-                Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
-                showPanel.removeAll();
-                for (int i = 0; i < animes.size(); i++) {
-                    String name = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
-                    animeTest[i][0] = name;
-                    showPanel.add(new ShowEntry(name, thumbnails.get(i), i, gui));
-                }
-                showsModel.setDataVector(animeTest, showsHeader);
-                showPanel.revalidate();
+                    loadingAnimeBar.setValue(30);
+                    int max = animes.size() - 1;
+
+                    Object[][] animeTest = new Object[animes.size()][1]; //[rows][columns]
+                    showPanel.removeAll();
+                    for (int i = 0; i < animes.size(); i++) {
+                        String name = animes.get(i).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " ");
+                        animeTest[i][0] = name;
+                        try {
+                            showPanel.add(new ShowEntry(name, thumbnails.get(i), i, gui));
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        double completed = (double) i / (double) max;
+                        int perhepage = (int) (70 * completed);
+                        loadingAnimeBar.setValue(perhepage + 30);
+                        System.out.println("show " + i);
+                    }
+                    showsModel.setDataVector(animeTest, showsHeader);
+                    showPanel.revalidate();
+                };
+
+                Thread thread = new Thread(searchRunnable);
+                thread.start();
             }
         });
 
@@ -109,6 +131,8 @@ public class GUI {
 
     private void loadEpisodes() {
 
+        loadingAnimeBar.setValue(0);
+
         episodes = Show.getTitle(animes, selectedShow);
         Collections.reverse(episodes);
         Object[][] episodesArray = new Object[episodes.size()][1]; //[rows][columns]
@@ -124,13 +148,17 @@ public class GUI {
         loadEpisodes();
     }
 
+    private void setup() {
+
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+    }
+
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(new DarculaLaf());
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         new GUI();
     }
 }
