@@ -56,4 +56,20 @@ public class Page {
         return wordsList;
     }
 
+    public static List<String> getElementsByCSSQ(String url, String cssQ) {
+        try {
+            Document doc = getDoc(url);
+            if (doc == null)
+                return new ArrayList<String>();
+            Elements links = doc.select(cssQ);
+            List<String> wordsList = new ArrayList<String>();
+            for (Element link : links) {
+                wordsList.add(link.text());
+            }
+            return wordsList;
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
 }

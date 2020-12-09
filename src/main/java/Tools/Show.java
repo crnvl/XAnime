@@ -55,7 +55,7 @@ public class Show {
 
     /* returns all available titles with the searched name */
     public static List<String> getTitle(List<String> urls, int title) {
-        List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
+        List<String> episodeSelection = getRawTagsOfCSSQ(urls.get(title), titleClass);
         List<String> episodes;
         episodes = new ArrayList<String>();
         for (int i = 0; i < episodeSelection.size(); i++) {
@@ -66,6 +66,13 @@ public class Show {
 
         }
         return episodes;
+    }
+
+    public static String getDescription(List<String> urls, int title) {
+        String desc = String.valueOf(getElementsByCSSQ(urls.get(title), "#description-mob"));
+            String[] split = desc.split("… READ MORE");
+            desc = split[1].replaceAll("Description ", ""). replaceAll("READ LESS", "");
+        return desc;
     }
 
     public static String getEpisode(List<String> urls, int episode) {
