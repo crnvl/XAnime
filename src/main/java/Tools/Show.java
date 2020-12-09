@@ -70,8 +70,14 @@ public class Show {
 
     public static String getDescription(List<String> urls, int title) {
         String desc = String.valueOf(getElementsByCSSQ(urls.get(title), "#description-mob"));
-            String[] split = desc.split("… READ MORE");
-            desc = split[1].replaceAll("Description ", ""). replaceAll("READ LESS", "");
+        String[] split = desc.split("READ MORE");
+        if(split.length > 1) {
+            System.out.println(split[1]);
+            desc = split[1].replaceAll("Description |^ ?", "").replaceAll("READ LESS]", "");
+        } else {
+            System.out.println(split[0]);
+            desc = split[0].replaceAll("\\[Description ", "").replaceAll("]$", "");
+        }
         return desc;
     }
 
