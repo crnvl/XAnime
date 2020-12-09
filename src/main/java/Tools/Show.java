@@ -2,6 +2,7 @@ package Tools;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static Tools.Page.*;
@@ -25,8 +26,8 @@ public class Show {
     /* returns source url from video page */
     public static String getVideoURL(String videoPage) {
         String returnA;
-            List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
-            returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
+        List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
+        returnA = vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
         return returnA;
     }
 
@@ -42,14 +43,14 @@ public class Show {
         String url = baseUrl + searchQuery + title;
         List<String> urls = new ArrayList<String>();
         List<String> selection = getRawTagsOfCSSQ(url, searchCSSQ);
+        for (int i = 0; i < selection.size(); i++) {
+            urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+        }
+        if (thumbnails) {
             for (int i = 0; i < selection.size(); i++) {
-                urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
+                urls.add(i, PageUtils.extractUrls(selection.get(i)).get(1));
             }
-            if(thumbnails) {
-                for (int i = 0; i < selection.size(); i++) {
-                    urls.add(i, PageUtils.extractUrls(selection.get(i)).get(1));
-                }
-            }
+        }
         return urls;
     }
 
@@ -57,14 +58,14 @@ public class Show {
     public static List<String> getTitle(List<String> urls, int title) {
         List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
         List<String> episodes;
-            episodes = new ArrayList<String>();
-            for (int i = 0; i < episodeSelection.size(); i++) {
-                List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
-                for (int j = 0; j <allUrls.size() ; j++) {
-                    episodes.add(i, allUrls.get(j));
-                }
-
+        episodes = new ArrayList<String>();
+        for (int i = 0; i < episodeSelection.size(); i++) {
+            List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
+            for (int j = 0; j < allUrls.size(); j++) {
+                episodes.add(i, allUrls.get(j));
             }
+
+        }
         return episodes;
     }
 
