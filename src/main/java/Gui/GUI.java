@@ -2,6 +2,8 @@ package Gui;
 
 import Tools.Show;
 import com.bulenkov.darcula.DarculaLaf;
+import com.github.weisj.darklaf.LafManager;
+import com.github.weisj.darklaf.theme.DarculaTheme;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -157,11 +159,8 @@ public class GUI {
     }
 
     public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new DarculaLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+        LafManager.install(new DarculaTheme());
+
         new GUI();
     }
 }
