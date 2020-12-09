@@ -56,7 +56,7 @@ public class Show {
 
     /* returns all available titles with the searched name */
     public static List<String> getTitle(List<String> urls, int title) {
-        List<String> episodeSelection = getRawTagsOfCSSQ(urls.get(title), titleClass);
+        List<String> episodeSelection = getRawTagsOfClass(urls.get(title), titleClass);
         List<String> episodes;
         episodes = new ArrayList<String>();
         for (int i = 0; i < episodeSelection.size(); i++) {
