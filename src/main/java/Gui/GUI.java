@@ -27,6 +27,7 @@ public class GUI {
     private JPanel showPanel;
     private JScrollPane showScrollPanel;
     private JProgressBar loadingAnimeBar;
+    private JTextArea animeDescArea;
     private JLabel animeNameLabel;
 
     private DefaultTableModel showsModel = new DefaultTableModel();
@@ -106,7 +107,6 @@ public class GUI {
                     double completed = (double) i / (double) max;
                     int perhepage = (int) (70 * completed);
                     loadingAnimeBar.setValue(perhepage + 30);
-                    System.out.println("show " + i);
                 }
                 showsModel.setDataVector(animeTest, showsHeader);
                 showPanel.revalidate();
@@ -131,12 +131,17 @@ public class GUI {
         });
     }
 
+    /**
+     * Load episodes and show info and display it on the right side of the screen
+     */
     private void loadEpisodes() {
 
         loadingAnimeBar.setValue(0);
         animeNameLabel.setText(animes.get(selectedShow).replaceAll("https:\\/\\/4anime.to\\/anime\\/(.+)", "$1").replaceAll("-", " "));
 
         //set description here
+        String desc = Show.getDescription(animes, selectedShow);
+        animeDescArea.setText(desc);
 
         episodes = Show.getTitle(animes, selectedShow);
         Collections.reverse(episodes);
@@ -160,7 +165,6 @@ public class GUI {
 
     public static void main(String[] args) {
         LafManager.install(new DarculaTheme());
-
         new GUI();
     }
 }

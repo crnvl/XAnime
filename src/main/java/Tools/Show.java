@@ -2,6 +2,7 @@ package Tools;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static Tools.Page.*;
@@ -26,7 +27,7 @@ public class Show {
     public static String getVideoURL(String videoPage) {
         String returnA;
         List<String> vidUrl = getRawTagsOfURL(videoPage, "source");
-        returnA =  vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
+        returnA = vidUrl.get(0).replaceAll("<source src=\"", "").replaceAll("\" type=\"video/mp4\">", "");
         return returnA;
     }
 
@@ -45,7 +46,7 @@ public class Show {
         for (int i = 0; i < selection.size(); i++) {
             urls.add(i, PageUtils.extractUrls(selection.get(i)).get(0));
         }
-        if(thumbnails) {
+        if (thumbnails) {
             for (int i = 0; i < selection.size(); i++) {
                 urls.add(i, PageUtils.extractUrls(selection.get(i)).get(1));
             }
@@ -60,7 +61,7 @@ public class Show {
         episodes = new ArrayList<String>();
         for (int i = 0; i < episodeSelection.size(); i++) {
             List<String> allUrls = PageUtils.extractUrls(episodeSelection.get(i));
-            for (int j = 0; j <allUrls.size() ; j++) {
+            for (int j = 0; j < allUrls.size(); j++) {
                 episodes.add(i, allUrls.get(j));
             }
 
@@ -70,8 +71,14 @@ public class Show {
 
     public static String getDescription(List<String> urls, int title) {
         String desc = String.valueOf(getElementsByCSSQ(urls.get(title), "#description-mob"));
-            String[] split = desc.split("… READ MORE");
-            desc = split[1].replaceAll("Description ", ""). replaceAll("READ LESS", "");
+        String[] split = desc.split("READ MORE");
+        if(split.length > 1) {
+            System.out.println(split[1]);
+            desc = split[1].replaceAll("Description |^ ?", "").replaceAll("READ LESS]", "");
+        } else {
+            System.out.println(split[0]);
+            desc = split[0].replaceAll("\\[Description ", "").replaceAll("]$", "");
+        }
         return desc;
     }
 
