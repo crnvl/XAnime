@@ -27,14 +27,4 @@
             <version>1.13.1</version>
         </dependency>
     </dependencies>
-         
- <settings>
-  <servers>
-    <server>
-      <id>xanime</id>
-      <username>angelsflyinhell</username>
-    </server>
-  </servers>
-</settings>
-
 </project>
