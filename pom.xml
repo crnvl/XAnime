@@ -27,5 +27,19 @@
             <version>1.13.1</version>
         </dependency>
     </dependencies>
+         
+ <settings>
+  <servers>
+    <server>
+      <id>repo1</id>
+      <username>repouser</username>
+      <!-- other optional elements:
+        <password>my_login_password</password>
+        <privateKey>/path/to/identity</privateKey> (default is ~/.ssh/id_dsa)
+        <passphrase>my_key_passphrase</passphrase>
+      -->
+    </server>
+  </servers>
+</settings>
 
 </project>
