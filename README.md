@@ -1,4 +1,4 @@
-[![Build](https://xxx.execute-api.us-west-2.amazonaws.com/production/badge/angelsflyinhell/XAnime)](https://xxx.execute-api.us-west-2.amazonaws.com/production/results/angelsflyinhell/XAnime)
+[![Build Status](https://github.com/angelsflyinhell/XAnime/workflows/maven.yml/badge.svg)](https://github.com/angelsflyinhell/XAnime/actions)
 # XAnime
 Easy-To-Use Java Library to browse Anime on the Web.
 
