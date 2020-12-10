@@ -4,6 +4,7 @@ Easy-To-Use Java Library to browse Anime on the Web.
 
 ## How to use
 Simply copy all classes from [here](https://github.com/angelsflyinhell/XAnime/tree/stable/src/main/java/Tools) and follow the examples and documentation below!
+[Requires JSoup]
 #### Maven Repository coming soon.
 
 ### Supported Sites
