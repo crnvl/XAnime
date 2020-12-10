@@ -1,17 +1,16 @@
 # XAnime
-Easily browse and watch Anime through your Command Line.
+Easy-To-Use Java Library to browse Anime on the Web.
 
 ## How to use
-If you want to use this in your Project, copy all Classes in ``Tools/`` and paste them.
-Code Snippets can be found below.
-
-A Tutorial for personal use is coming soon.
+Simply copy all classes from [here](https://github.com/angelsflyinhell/XAnime/tree/stable/src/main/java/Tools) and follow the examples and documentation below!
+#### Maven Repository coming soon.
 
 ### Supported Sites
 - [4anime.to](4anime.to)
 
 # Code Snippets and Documentation
 ## Documentation
+####
 
 ### search()
 ```java
