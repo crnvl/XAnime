@@ -1,4 +1,4 @@
-![Java CI with Maven](https://github.com/angelsflyinhell/XAnime/workflows/Java%20CI%20with%20Maven/badge.svg) ![Code Quality](https://github.com/angelsflyinhell/XAnime/workflows/Code%20Quality/badge.svg)
+![Java CI with Maven](https://github.com/angelsflyinhell/XAnime/workflows/Java%20CI%20with%20Maven/badge.svg) ![Code Quality](https://github.com/angelsflyinhell/XAnime/workflows/Code%20Quality/badge.svg) ![Labeler](https://github.com/angelsflyinhell/XAnime/workflows/Labeler/badge.svg)
 # XAnime 
 Easy-To-Use Java Library to browse Anime on the Web.
 
