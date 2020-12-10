@@ -1,4 +1,4 @@
-![Build](https://github.com/angelsflyinhell/XAnime/tree/stable/.github/workflows/maven.yml/badge.svg)
+![example workflow name](https://github.com/angelsflyinhell/XAnime/blob/stable/.github/workflows/maven.yml/badge.svg)
 # XAnime
 Easy-To-Use Java Library to browse Anime on the Web.
 
