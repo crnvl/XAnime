@@ -10,7 +10,7 @@ Simply copy all classes from [here](https://github.com/angelsflyinhell/XAnime/tr
 
 # Code Snippets and Documentation
 ## Documentation
-####
+#### In-Code Docs coming soon.
 
 ### search()
 ```java
