@@ -1,3 +1,4 @@
+![Build](https://github.com/angelsflyinhell/XAnime/tree/stable/.github/workflows/badge.svg)
 # XAnime
 Easy-To-Use Java Library to browse Anime on the Web.
 
