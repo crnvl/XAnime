@@ -1,13 +1,9 @@
 name: 'Setup Java JDK'
-description: 'Set up a specific version of the Java JDK and add the
-   command-line tools to the PATH'
+description: 'Set up a specific version of the Java JDK and add the command-line tools to the PATH'
 author: 'GitHub'
 inputs:
   java-version:
-    description: 'The Java version to make available on the path. Takes a whole
-       or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x).
-       Early access versions can be specified in the form of e.g. 14-ea,
-       14.0.0-ea, or 14.0.0-ea.28'
+    description: 'The Java version to make available on the path. Takes a whole or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x). Early access versions can be specified in the form of e.g. 14-ea, 14.0.0-ea, or 14.0.0-ea.28'
     required: true
   java-package:
     description: 'The package type (jre, jdk, jdk+fx)'
