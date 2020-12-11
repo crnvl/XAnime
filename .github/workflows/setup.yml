@@ -1,0 +1,57 @@
+name: 'Setup Java JDK'
+description: 'Set up a specific version of the Java JDK and add the
+   command-line tools to the PATH'
+author: 'GitHub'
+inputs:
+  java-version:
+    description: 'The Java version to make available on the path. Takes a whole
+       or semver Java version, or 1.x syntax (e.g. 1.8 => Java 8.x).
+       Early access versions can be specified in the form of e.g. 14-ea,
+       14.0.0-ea, or 14.0.0-ea.28'
+    required: true
+  java-package:
+    description: 'The package type (jre, jdk, jdk+fx)'
+    required: false
+    default: 'jdk'
+  architecture:
+    description: 'The architecture (x86, x64) of the package.'
+    required: false
+    default: 'x64'
+  jdkFile:
+    description: 'Path to where the compressed JDK is located. The path could
+       be in your source repository or a local path on the agent.'
+    required: false
+  server-id:
+    description: 'ID of the distributionManagement repository in the pom.xml
+       file. Default is `github`'
+    required: false
+    default: 'github'
+  server-username:
+    description: 'Environment variable name for the username for authentication
+       to the Apache Maven repository. Default is $GITHUB_ACTOR'
+    required: false
+    default: 'GITHUB_ACTOR'
+  server-password:
+    description: 'Environment variable name for password or token for
+       authentication to the Apache Maven repository. Default is $GITHUB_TOKEN'
+    required: false
+    default: 'GITHUB_TOKEN'
+  settings-path:
+    description: 'Path to where the settings.xml file will be written. Default is ~/.m2.'
+    required: false
+  gpg-private-key:
+    description: 'GPG private key to import. Default is empty string.'
+    required: false
+  gpg-passphrase:
+    description: 'Environment variable name for the GPG private key passphrase. Default is
+       $GPG_PASSPHRASE.'
+    required: false
+outputs:
+  path:
+    description: 'Path to where the java environment has been installed (same as $JAVA_HOME)'
+  version:
+    description: 'Actual version of the java environment that has been installed'
+runs:
+  using: 'node12'
+  main: 'dist/setup/index.js'
+  post: 'dist/cleanup/index.js'
